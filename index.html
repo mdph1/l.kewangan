@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laporan Peruntukan MARRIS / BP1</title>
+<title>Laporan Peruntukan</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Firebase SDK -->
@@ -28,10 +28,8 @@
   const db  = getDatabase(app);
   const dbRef = ref(db, 'marris_bp1');
 
-  // ── EXPOSE TO GLOBAL SCOPE ──────────────────────────
   window._fb = { db, ref, push, set, update, remove, dbRef };
 
-  // ── SETTINGS LISTENER (header info) ─────────────────
   const settingsRef = ref(db, 'marris_settings');
   onValue(settingsRef, (snap) => {
     const s = snap.val() || {};
@@ -45,22 +43,22 @@
     applySettings();
   });
 
-  // ── REALTIME LISTENER ───────────────────────────────
   onValue(dbRef, (snapshot) => {
     const data = snapshot.val();
     window._rows = [];
     if (data) {
       Object.entries(data).forEach(([key, val]) => {
         window._rows.push({
-          firebaseKey: key,
-          kod:         val.kod         || '',
-          perihal:     val.perihal     || '',
-          peruntukan:  parseFloat(val.peruntukan) || 0,
-          belanja:     parseFloat(val.belanja)    || 0,
-          createdAt:   val.createdAt   || 0
+          firebaseKey:      key,
+          noInden:          val.noInden          || '',
+          rujukanKelulusan: val.rujukanKelulusan || '',
+          kod:              val.kod              || '',
+          perihal:          val.perihal          || '',
+          peruntukan:       parseFloat(val.peruntukan) || 0,
+          belanja:          parseFloat(val.belanja)    || 0,
+          createdAt:        val.createdAt        || 0
         });
       });
-      // Sort by creation time
       window._rows.sort((a, b) => a.createdAt - b.createdAt);
     }
     renderTable();
@@ -82,7 +80,6 @@
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
   .serif { font-family: 'Source Serif 4', Georgia, serif; }
 
-  /* NAV */
   nav { position: sticky; top: 0; z-index: 50; background: var(--navy); padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(15,56,90,.25); }
   .nav-brand { display: flex; align-items: center; gap: 10px; }
   .nav-icon { width: 36px; height: 36px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
@@ -91,7 +88,6 @@
   .nav-sub { color: #94a3b8; font-size: 11px; }
   .nav-actions { display: flex; gap: 8px; align-items: center; }
 
-  /* SYNC INDICATOR */
   .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; margin-right: 4px; flex-shrink: 0; transition: background .3s; }
   .sync-dot.syncing { background: var(--gold); animation: pulse 1s infinite; }
   .sync-dot.error   { background: var(--red); }
@@ -107,12 +103,9 @@
   .btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border); } .btn-ghost:hover:not(:disabled)   { background: var(--bg); }
   .btn-danger  { background: #fef2f2; color: var(--red); border: none; } .btn-danger:hover:not(:disabled)  { background: #fee2e2; }
 
-  /* LAYOUT */
-  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 40px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 40px; }
   .card { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
 
-
-  /* REPORT HEADER */
   .report-header { padding: 22px 24px; margin-bottom: 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .report-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
   .accent-bar { width: 4px; height: 32px; background: var(--gold); border-radius: 99px; flex-shrink: 0; }
@@ -121,7 +114,6 @@
   .status-badge svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
   .meta { font-size: 11px; color: #b0bec5; margin-top: 3px; text-align: right; }
 
-  /* SUMMARY CARDS */
   .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
   @media (max-width: 680px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
   .summary-card { padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
@@ -130,12 +122,11 @@
   .progress-track { margin-top: 10px; height: 4px; border-radius: 99px; background: #f1f5f9; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 99px; transition: width .7s cubic-bezier(.25,.46,.45,.94); }
 
-  /* TABLE */
   .table-card { margin-bottom: 16px; overflow: hidden; }
   .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
   .table-title { font-size: 15px; font-weight: 700; color: var(--navy); }
   .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
   thead tr { background: #f7f8fb; }
   th { padding: 10px 14px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); white-space: nowrap; }
   th.r { text-align: right; } th.c { text-align: center; } th.l { text-align: left; }
@@ -151,13 +142,11 @@
   .icon-btn.edit { color: var(--muted); } .icon-btn.edit:hover { background: #f1f5f9; color: var(--navy); }
   .icon-btn.del  { color: #ef5350; }     .icon-btn.del:hover  { background: #fef2f2; }
 
-  /* EMPTY STATE */
   .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 16px; color: #cbd5e1; }
   .empty-state svg { width: 44px; height: 44px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
   .empty-state p { margin-top: 12px; font-size: 13px; text-align: center; }
   .empty-state .btn { margin-top: 16px; }
 
-  /* FOOTER */
   .signature-card { padding: 24px; }
   .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
   @media (max-width: 500px) { .sig-grid { grid-template-columns: 1fr; } }
@@ -168,7 +157,6 @@
   .footer-bar { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .footer-note { font-size: 11px; color: #cbd5e1; }
 
-  /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.48); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(3px); }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border-radius: 16px; width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,.18); animation: modalIn .2s ease; overflow: hidden; }
@@ -191,8 +179,8 @@
   .modal-foot { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
   .modal-saving { display: none; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
   .modal-saving .spinner-sm { width: 14px; height: 14px; border: 2px solid #e2e8f0; border-top-color: var(--navy); border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* CONFIRM */
   .confirm-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 150; display: none; align-items: center; justify-content: center; padding: 16px; }
   .confirm-overlay.open { display: flex; }
   .confirm-box { background: var(--surface); border-radius: 14px; width: 100%; max-width: 340px; box-shadow: 0 16px 48px rgba(0,0,0,.2); padding: 28px 24px; text-align: center; animation: modalIn .18s ease; }
@@ -202,7 +190,6 @@
   .confirm-msg { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
   .confirm-btns { display: flex; gap: 10px; justify-content: center; }
 
-  /* TOAST */
   .toast { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,.18); transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.25,.46,.45,.94); pointer-events: none; background: var(--navy); }
   .toast.show { transform: translateY(0); opacity: 1; }
   .toast.error { background: var(--red); }
@@ -212,87 +199,60 @@
   @keyframes rowIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
   .row-anim { animation: rowIn .22s ease forwards; }
 
-  /* EDITABLE FIELDS */
-  .editable {
-    cursor: pointer; border-radius: 5px; padding: 1px 5px; margin: -1px -5px;
-    transition: background .15s;
-    position: relative; display: inline-flex; align-items: center; gap: 5px;
-  }
+  .editable { cursor: pointer; border-radius: 5px; padding: 1px 5px; margin: -1px -5px; transition: background .15s; position: relative; display: inline-flex; align-items: center; gap: 5px; }
   .editable:hover { background: rgba(201,162,39,.12); }
-  .editable .edit-icon {
-    width: 12px; height: 12px; opacity: 0; transition: opacity .15s; flex-shrink: 0;
-    stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-  }
+  .editable .edit-icon { width: 12px; height: 12px; opacity: 0; transition: opacity .15s; flex-shrink: 0; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .editable:hover .edit-icon { opacity: 1; }
-  .editable-input {
-    border: none; outline: none; background: transparent;
-    font: inherit; color: inherit; width: auto; min-width: 60px;
-    border-bottom: 2px solid var(--gold); padding-bottom: 1px;
-  }
 
-  /* SETTINGS MODAL */
   .settings-modal { max-width: 520px; }
 
   @media print {
     @page { size: A4 landscape; margin: 10mm 12mm; }
-
     nav, .no-print { display: none !important; }
-
     html, body { height: auto !important; background: white !important; font-size: 11px; }
-
     main { padding: 0; max-width: 100%; width: 100%; }
-
     .card { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 4px !important; margin-bottom: 6px !important; }
-
-    /* Report header compact */
     .report-header { padding: 8px 12px !important; margin-bottom: 6px !important; }
     .report-title-row h1, .report-title-row .serif { font-size: 14px !important; }
     .report-dept { font-size: 10px !important; margin-top: 1px !important; }
     .meta { font-size: 9px !important; }
     .status-badge { font-size: 9px !important; padding: 2px 7px !important; }
-
-    /* Summary cards single row, compact */
     .summary-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; margin-bottom: 6px !important; }
     .summary-card { padding: 8px 10px !important; border-radius: 4px !important; }
     .summary-label { font-size: 8px !important; margin-bottom: 2px !important; }
     .summary-value { font-size: 12px !important; }
     .progress-track { margin-top: 4px !important; height: 3px !important; }
-
-    /* Table compact */
     .table-card { margin-bottom: 6px !important; overflow: visible !important; }
     .table-header { padding: 7px 12px !important; border-bottom: 1px solid #ddd !important; }
     .table-title { font-size: 11px !important; }
     .table-wrap { overflow: visible !important; }
-
-    table { font-size: 9.5px !important; min-width: unset !important; width: 100% !important; table-layout: fixed; }
+    table { font-size: 9px !important; min-width: unset !important; width: 100% !important; table-layout: fixed; }
     thead tr { background: #f0f2f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    th { padding: 5px 7px !important; font-size: 8px !important; letter-spacing: 0 !important; }
-    td { padding: 5px 7px !important; font-size: 9.5px !important; }
+    th { padding: 5px 5px !important; font-size: 7.5px !important; letter-spacing: 0 !important; }
+    td { padding: 4px 5px !important; font-size: 9px !important; }
     td.r, th.r { text-align: right; }
     td.c, th.c { text-align: center; }
 
-    /* Column widths for landscape A4 */
-    table th:nth-child(1), table td:nth-child(1) { width: 30px; }
-    table th:nth-child(2), table td:nth-child(2) { width: 80px; }
-    table th:nth-child(3), table td:nth-child(3) { width: auto; }
-    table th:nth-child(4), table td:nth-child(4) { width: 110px; }
-    table th:nth-child(5), table td:nth-child(5) { width: 100px; }
-    table th:nth-child(6), table td:nth-child(6) { width: 100px; }
-    table th:nth-child(7), table td:nth-child(7) { width: 60px; }
-    table th:nth-child(8), table td:nth-child(8) { width: 60px; }
+    /* Column widths for landscape A4 with No Inden + Rujukan Kelulusan columns */
+    table th:nth-child(1), table td:nth-child(1) { width: 22px; }
+    table th:nth-child(2), table td:nth-child(2) { width: 65px; }
+    table th:nth-child(3), table td:nth-child(3) { width: 65px; }
+    table th:nth-child(4), table td:nth-child(4) { width: 70px; }
+    table th:nth-child(5), table td:nth-child(5) { width: auto; }
+    table th:nth-child(6), table td:nth-child(6) { width: 95px; }
+    table th:nth-child(7), table td:nth-child(7) { width: 85px; }
+    table th:nth-child(8), table td:nth-child(8) { width: 85px; }
+    table th:nth-child(9), table td:nth-child(9) { width: 50px; }
+    table th:nth-child(10), table td:nth-child(10) { width: 50px; }
 
-    .badge { padding: 1px 5px !important; font-size: 8.5px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .badge { padding: 1px 5px !important; font-size: 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody tr:last-child td { border-bottom: 1px solid #eee !important; }
-
-    /* Signature compact */
     .signature-card { padding: 10px 12px !important; }
     .sig-grid { gap: 16px !important; }
     .sig-name { font-size: 11px !important; }
     .sig-label, .sig-caption { font-size: 9px !important; }
     .footer-note { font-size: 8px !important; }
     .footer-bar { margin-top: 8px !important; padding-top: 6px !important; }
-
-    /* Prevent page breaks inside cards */
     .card { page-break-inside: avoid; break-inside: avoid; }
     table { page-break-inside: auto; }
     tr { page-break-inside: avoid; break-inside: avoid; }
@@ -308,7 +268,7 @@
       <img src="https://lh3.googleusercontent.com/d/1gkq2KUDeSahQT9db8KgIs6HtDotaeao1" alt="MDPH" style="width:36px;height:36px;object-fit:contain;border-radius:8px;">
     </div>
     <div>
-      <div class="nav-title">MDPH — MARRIS / BP1</div>
+      <div class="nav-title">Majlis Daerah Pengkalan Hulu</div>
       <div class="nav-sub">Rekod Kewangan Rasmi</div>
     </div>
   </div>
@@ -411,6 +371,8 @@
           <tr>
             <th class="l" style="width:40px;">Bil</th>
             <th class="l">Kod Akaun / Objek</th>
+            <th class="l">No. Inden / No. Fail</th>
+            <th class="l">Rujukan Kelulusan</th>
             <th class="l">Perihal</th>
             <th class="r">Peruntukan (RM)</th>
             <th class="r">Belanja (RM)</th>
@@ -522,9 +484,21 @@
       </button>
     </div>
     <div class="modal-body">
+      <!-- Row 1: Kod + No Inden side by side -->
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Kod Akaun / Objek</label>
+          <input type="text" id="f-kod" class="field-input mono" placeholder="cth. 11000" maxlength="20">
+        </div>
+        <div class="field-group">
+          <label class="field-label">No. Inden / No. Fail</label>
+          <input type="text" id="f-noInden" class="field-input mono" placeholder="cth. IN-2024-001" maxlength="40">
+        </div>
+      </div>
+      <!-- Row 2: Rujukan Kelulusan full width -->
       <div class="field-group">
-        <label class="field-label">Kod Akaun / Objek</label>
-        <input type="text" id="f-kod" class="field-input mono" placeholder="cth. 11000" maxlength="20">
+        <label class="field-label">Rujukan Kelulusan</label>
+        <input type="text" id="f-rujukanKelulusan" class="field-input mono" placeholder="cth. SUK.JPN.600-1/2/3(45)" maxlength="80">
       </div>
       <div class="field-group">
         <label class="field-label">Perihal <span style="color:var(--red)">*</span></label>
@@ -577,28 +551,22 @@
 </div>
 
 <script>
-// ── STATE ────────────────────────────────────────────
 window._rows = [];
 let modalMode      = 'add';
-let editingKey     = null;   // Firebase key
+let editingKey     = null;
 let pendingDelKey  = null;
 
-// ── HELPERS ──────────────────────────────────────────
 const fmt = n  => 'RM ' + Number(n).toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pct = (b, p) => p > 0 ? ((b / p) * 100).toFixed(1) : '0.0';
 const esc = s  => { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
 
-
-// ── SYNC INDICATOR ───────────────────────────────────
 function setSyncState(state) {
-  // state: 'ok' | 'syncing' | 'error'
   const dot   = document.getElementById('sync-dot');
   const label = document.getElementById('sync-label-text');
   dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '');
   label.textContent = state === 'syncing' ? 'Menyimpan...' : state === 'error' ? 'Ralat' : 'Disambung';
 }
 
-// ── APPLY SETTINGS TO DOM ────────────────────────────
 function applySettings() {
   const s = window._settings || {};
   const tahun = s.tahunKewangan || '2024';
@@ -608,10 +576,8 @@ function applySettings() {
   if (el('hdr-tahun'))        el('hdr-tahun').textContent        = tahun;
   if (el('hdr-disediakan'))   el('hdr-disediakan').textContent   = s.disediakanOleh || 'Nama Pegawai';
   if (el('hdr-disahkan'))     el('hdr-disahkan').textContent     = s.disahkanOleh   || 'Ketua Jabatan';
-  if (el('footer-ref'))       el('footer-ref').textContent       = 'Ref: MARRIS/BP1/' + tahun;
 }
 
-// ── SETTINGS MODAL: OPEN ─────────────────────────────
 function openSettingsModal() {
   const s = window._settings || {};
   document.getElementById('s-nama-laporan').value = s.namaLaporan    || '';
@@ -623,8 +589,6 @@ function openSettingsModal() {
   document.getElementById('settings-overlay').classList.add('open');
   setTimeout(() => document.getElementById('s-nama-laporan').focus(), 60);
 }
-
-// ── SETTINGS MODAL: CLOSE ────────────────────────────
 function closeSettingsModal() {
   document.getElementById('settings-overlay').classList.remove('open');
 }
@@ -632,7 +596,6 @@ document.getElementById('settings-overlay').addEventListener('click', e => {
   if (e.target.id === 'settings-overlay') closeSettingsModal();
 });
 
-// ── SETTINGS MODAL: SAVE → Firebase ─────────────────
 async function saveSettings() {
   if (!window._fb) { showToast('Pangkalan data belum bersedia.', true); return; }
   const payload = {
@@ -660,19 +623,12 @@ async function saveSettings() {
   document.getElementById('settings-saving').style.display = 'none';
 }
 
-// ── LOADING ──────────────────────────────────────────
-function setLoading(on) {
-  document.getElementById('loading-overlay').classList.toggle('hidden', !on);
-}
-
-// ── RECALC SUMMARY ───────────────────────────────────
 function recalc() {
   let tp = 0, tb = 0;
   window._rows.forEach(r => { tp += r.peruntukan; tb += r.belanja; });
   const baki    = tp - tb;
   const perc    = tp > 0 ? (tb / tp * 100) : 0;
   const bakiPct = tp > 0 ? Math.max(baki / tp * 100, 0) : 0;
-
   document.getElementById('sum-peruntukan').textContent = fmt(tp);
   document.getElementById('sum-belanja').textContent    = fmt(tb);
   document.getElementById('sum-baki').textContent       = fmt(baki);
@@ -682,7 +638,6 @@ function recalc() {
   document.getElementById('bar-pct').style.width       = Math.min(perc, 100) + '%';
 }
 
-// ── RENDER TABLE ─────────────────────────────────────
 function renderTable() {
   const tbody = document.getElementById('table-body');
   const table = document.getElementById('main-table');
@@ -705,12 +660,22 @@ function renderTable() {
       const bakiColor  = baki < 0 ? 'var(--red)' : 'var(--green)';
       const key = r.firebaseKey;
 
+      const noIndenDisplay = r.noInden
+        ? `<span class="mono" style="font-size:12px;color:var(--navy);font-weight:600;">${esc(r.noInden)}</span>`
+        : `<span style="color:var(--muted);font-size:11px;">—</span>`;
+
+      const rujukanDisplay = r.rujukanKelulusan
+        ? `<span class="mono" style="font-size:12px;color:var(--navy);font-weight:600;">${esc(r.rujukanKelulusan)}</span>`
+        : `<span style="color:var(--muted);font-size:11px;">—</span>`;
+
       const tr = document.createElement('tr');
       tr.className = 'row-anim';
       tr.style.animationDelay = (i * 25) + 'ms';
       tr.innerHTML = `
         <td style="color:var(--muted);font-size:12px;">${i + 1}</td>
         <td class="mono" style="color:var(--navy);font-weight:600;font-size:12px;">${esc(r.kod)}</td>
+        <td>${noIndenDisplay}</td>
+        <td>${rujukanDisplay}</td>
         <td>${esc(r.perihal)}</td>
         <td class="r mono">${fmt(r.peruntukan)}</td>
         <td class="r mono" style="color:var(--gold);">${fmt(r.belanja)}</td>
@@ -733,7 +698,6 @@ function renderTable() {
   recalc();
 }
 
-// ── MODAL HELPERS ────────────────────────────────────
 function setModalBusy(on) {
   document.getElementById('modal-saving').style.display = on ? 'flex' : 'none';
   document.getElementById('btn-simpan').disabled = on;
@@ -747,27 +711,27 @@ function hideWarning() {
   document.getElementById('f-warning').style.display = 'none';
 }
 
-// ── MODAL: ADD ───────────────────────────────────────
 function openAddModal() {
   modalMode  = 'add';
   editingKey = null;
   document.getElementById('modal-title').textContent = 'Tambah Baris Baru';
-  ['f-kod','f-perihal','f-peruntukan','f-belanja'].forEach(id => document.getElementById(id).value = '');
+  ['f-kod','f-noInden','f-rujukanKelulusan','f-perihal','f-peruntukan','f-belanja'].forEach(id => document.getElementById(id).value = '');
   hideWarning();
   setModalBusy(false);
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('f-kod').focus(), 60);
 }
 
-// ── MODAL: EDIT ──────────────────────────────────────
 function openEditModal(key) {
   const r = window._rows.find(x => x.firebaseKey === key);
   if (!r) return;
   modalMode  = 'edit';
   editingKey = key;
   document.getElementById('modal-title').textContent   = 'Kemaskini Rekod';
-  document.getElementById('f-kod').value        = r.kod;
-  document.getElementById('f-perihal').value    = r.perihal;
+  document.getElementById('f-kod').value               = r.kod;
+  document.getElementById('f-noInden').value            = r.noInden;
+  document.getElementById('f-rujukanKelulusan').value   = r.rujukanKelulusan;
+  document.getElementById('f-perihal').value            = r.perihal;
   document.getElementById('f-peruntukan').value = r.peruntukan;
   document.getElementById('f-belanja').value    = r.belanja;
   hideWarning();
@@ -776,10 +740,11 @@ function openEditModal(key) {
   setTimeout(() => document.getElementById('f-perihal').focus(), 60);
 }
 
-// ── MODAL: SAVE → Firebase ───────────────────────────
 async function saveModal() {
-  const kod        = document.getElementById('f-kod').value.trim();
-  const perihal    = document.getElementById('f-perihal').value.trim();
+  const kod              = document.getElementById('f-kod').value.trim();
+  const noInden          = document.getElementById('f-noInden').value.trim();
+  const rujukanKelulusan = document.getElementById('f-rujukanKelulusan').value.trim();
+  const perihal          = document.getElementById('f-perihal').value.trim();
   const peruntukan = parseFloat(document.getElementById('f-peruntukan').value) || 0;
   const belanja    = parseFloat(document.getElementById('f-belanja').value)    || 0;
 
@@ -796,7 +761,7 @@ async function saveModal() {
 
   try {
     const { db, ref, push, set, update, dbRef } = window._fb;
-    const payload = { kod, perihal, peruntukan, belanja };
+    const payload = { kod, noInden, rujukanKelulusan, perihal, peruntukan, belanja };
 
     if (modalMode === 'add') {
       payload.createdAt = Date.now();
@@ -819,7 +784,6 @@ async function saveModal() {
   }
 }
 
-// ── MODAL: CLOSE ─────────────────────────────────────
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
 }
@@ -827,7 +791,6 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
   if (e.target.id === 'modal-overlay') closeModal();
 });
 
-// ── DELETE ───────────────────────────────────────────
 function deleteRow(key) {
   pendingDelKey = key;
   const r = window._rows.find(x => x.firebaseKey === key);
@@ -842,7 +805,6 @@ async function confirmDelete() {
   btn.disabled = true;
   btn.textContent = 'Memadamkan...';
   setSyncState('syncing');
-
   try {
     const { db, ref, remove } = window._fb;
     const rowRef = ref(db, 'marris_bp1/' + pendingDelKey);
@@ -854,7 +816,6 @@ async function confirmDelete() {
     setSyncState('error');
     showToast('Gagal memadam. Semak sambungan internet.', true);
   }
-
   btn.disabled = false;
   btn.textContent = 'Ya, Padam';
   pendingDelKey = null;
@@ -869,7 +830,6 @@ document.getElementById('confirm-overlay').addEventListener('click', e => {
   if (e.target.id === 'confirm-overlay') closeConfirm();
 });
 
-// ── TOAST ────────────────────────────────────────────
 let toastTimer = null;
 function showToast(msg, isError = false) {
   const el = document.getElementById('toast');
@@ -880,28 +840,26 @@ function showToast(msg, isError = false) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// ── PRINT ────────────────────────────────────────────
 function printReport() {
   if (!window._rows || window._rows.length === 0) { showToast('Tiada data untuk dicetak.'); return; }
   window.print();
 }
 
-// ── EXPORT CSV ───────────────────────────────────────
 function exportCSV() {
   if (!window._rows || window._rows.length === 0) { showToast('Tiada data untuk dieksport.'); return; }
   const BOM = '\uFEFF';
-  let csv = BOM + 'Bil,Kod Akaun,Perihal,Peruntukan (RM),Belanja (RM),Baki (RM),% Guna,% Jimat\n';
+  let csv = BOM + 'Bil,Kod Akaun,No. Inden / No. Fail,Rujukan Kelulusan,Perihal,Peruntukan (RM),Belanja (RM),Baki (RM),% Guna,% Jimat\n';
   window._rows.forEach((r, i) => {
     const baki   = r.peruntukan - r.belanja;
     const pGuna  = pct(r.belanja, r.peruntukan);
     const pJimat = pct(Math.max(baki, 0), r.peruntukan);
     const safe   = s => '"' + String(s).replace(/"/g, '""') + '"';
-    csv += [i+1, safe(r.kod), safe(r.perihal), r.peruntukan.toFixed(2), r.belanja.toFixed(2), baki.toFixed(2), pGuna+'%', pJimat+'%'].join(',') + '\n';
+    csv += [i+1, safe(r.kod), safe(r.noInden), safe(r.rujukanKelulusan), safe(r.perihal), r.peruntukan.toFixed(2), r.belanja.toFixed(2), baki.toFixed(2), pGuna+'%', pJimat+'%'].join(',') + '\n';
   });
   let tp = 0, tb = 0;
   window._rows.forEach(r => { tp += r.peruntukan; tb += r.belanja; });
   const bT = tp - tb;
-  csv += `,"","JUMLAH",${tp.toFixed(2)},${tb.toFixed(2)},${bT.toFixed(2)},${pct(tb,tp)}%,${pct(Math.max(bT,0),tp)}%\n`;
+  csv += `,"","","","JUMLAH",${tp.toFixed(2)},${tb.toFixed(2)},${bT.toFixed(2)},${pct(tb,tp)}%,${pct(Math.max(bT,0),tp)}%\n`;
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
@@ -912,7 +870,6 @@ function exportCSV() {
   showToast('Fail CSV berjaya dieksport.');
 }
 
-// ── KEYBOARD ─────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeModal(); closeConfirm(); closeSettingsModal(); }
   if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open')) {
@@ -923,7 +880,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ── INIT ─────────────────────────────────────────────
 window._settings = {};
 document.getElementById('date-generated').textContent =
   'Dijana: ' + new Date().toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' });

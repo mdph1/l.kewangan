@@ -125,8 +125,18 @@
   .table-card { margin-bottom: 16px; overflow: hidden; }
   .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
   .table-title { font-size: 15px; font-weight: 700; color: var(--navy); }
+  .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 300px; }
+  .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+  .search-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 12px 7px 32px; font-size: 12px; font-family: inherit; outline: none; background: var(--bg); color: var(--text); transition: border .15s, box-shadow .15s; }
+  .search-input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,56,90,.08); background: #fff; }
+  .search-input::placeholder { color: var(--muted); }
+  .search-clear { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); display: none; padding: 2px; border-radius: 4px; line-height: 1; }
+  .search-clear:hover { color: var(--navy); }
+  .search-clear svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; display: block; }
+  .search-count { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .highlight { background: rgba(201,162,39,.28); border-radius: 2px; padding: 0 1px; font-weight: 700; }
   .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 820px; }
   thead tr { background: #f7f8fb; }
   th { padding: 10px 14px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); white-space: nowrap; }
   th.r { text-align: right; } th.c { text-align: center; } th.l { text-align: left; }
@@ -141,6 +151,12 @@
   .icon-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .icon-btn.edit { color: var(--muted); } .icon-btn.edit:hover { background: #f1f5f9; color: var(--navy); }
   .icon-btn.del  { color: #ef5350; }     .icon-btn.del:hover  { background: #fef2f2; }
+
+  /* Merged Kod + No Inden cell */
+  .kod-inden-cell { display: flex; flex-direction: column; gap: 2px; }
+  .kod-inden-primary { font-family: 'Courier New', monospace; font-size: 12px; color: var(--navy); font-weight: 700; line-height: 1.3; }
+  .kod-inden-secondary { font-family: 'Courier New', monospace; font-size: 11px; color: var(--muted); line-height: 1.3; }
+  .kod-inden-sep { display: inline-block; margin: 0 1px; opacity: .35; font-size: 9px; }
 
   .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 16px; color: #cbd5e1; }
   .empty-state svg { width: 44px; height: 44px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -233,17 +249,19 @@
     td.r, th.r { text-align: right; }
     td.c, th.c { text-align: center; }
 
-    /* Column widths for landscape A4 with No Inden + Rujukan Kelulusan columns */
+    /* Column widths: merged Kod+Inden, Rujukan, Perihal, amounts, percentages */
     table th:nth-child(1), table td:nth-child(1) { width: 22px; }
-    table th:nth-child(2), table td:nth-child(2) { width: 65px; }
-    table th:nth-child(3), table td:nth-child(3) { width: 65px; }
-    table th:nth-child(4), table td:nth-child(4) { width: 70px; }
-    table th:nth-child(5), table td:nth-child(5) { width: auto; }
-    table th:nth-child(6), table td:nth-child(6) { width: 95px; }
+    table th:nth-child(2), table td:nth-child(2) { width: 110px; }
+    table th:nth-child(3), table td:nth-child(3) { width: 70px; }
+    table th:nth-child(4), table td:nth-child(4) { width: auto; }
+    table th:nth-child(5), table td:nth-child(5) { width: 95px; }
+    table th:nth-child(6), table td:nth-child(6) { width: 85px; }
     table th:nth-child(7), table td:nth-child(7) { width: 85px; }
-    table th:nth-child(8), table td:nth-child(8) { width: 85px; }
+    table th:nth-child(8), table td:nth-child(8) { width: 50px; }
     table th:nth-child(9), table td:nth-child(9) { width: 50px; }
-    table th:nth-child(10), table td:nth-child(10) { width: 50px; }
+
+    .kod-inden-primary { font-size: 8px !important; }
+    .kod-inden-secondary { font-size: 7.5px !important; }
 
     .badge { padding: 1px 5px !important; font-size: 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody tr:last-child td { border-bottom: 1px solid #eee !important; }
@@ -360,6 +378,14 @@
   <div class="card table-card">
     <div class="table-header">
       <span class="serif table-title">Butiran Peruntukan &amp; Perbelanjaan</span>
+      <div class="search-wrap no-print">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Cari projek, kod, no. inden..." oninput="onSearch(this.value)">
+        <button class="search-clear" id="search-clear" onclick="clearSearch()" title="Padam carian">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <span class="search-count no-print" id="search-count"></span>
       <button class="btn btn-navy no-print" onclick="openAddModal()">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Tambah Baris
@@ -370,8 +396,7 @@
         <thead>
           <tr>
             <th class="l" style="width:40px;">Bil</th>
-            <th class="l">Kod Akaun / Objek</th>
-            <th class="l">No. Inden / No. Fail</th>
+            <th class="l">Kod Akaun / No. Inden</th>
             <th class="l">Rujukan Kelulusan</th>
             <th class="l">Perihal</th>
             <th class="r">Peruntukan (RM)</th>
@@ -555,10 +580,32 @@ window._rows = [];
 let modalMode      = 'add';
 let editingKey     = null;
 let pendingDelKey  = null;
+let _query         = '';
 
 const fmt = n  => 'RM ' + Number(n).toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pct = (b, p) => p > 0 ? ((b / p) * 100).toFixed(1) : '0.0';
 const esc = s  => { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
+
+function hilite(str, q) {
+  if (!q) return esc(str);
+  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return esc(str).replace(new RegExp('(' + escaped + ')', 'gi'), '<mark class="highlight">$1</mark>');
+}
+
+function onSearch(val) {
+  _query = val.trim();
+  document.getElementById('search-clear').style.display = _query ? 'block' : 'none';
+  renderTable();
+}
+
+function clearSearch() {
+  _query = '';
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-clear').style.display = 'none';
+  document.getElementById('search-count').textContent = '';
+  document.getElementById('search-input').focus();
+  renderTable();
+}
 
 function setSyncState(state) {
   const dot   = document.getElementById('sync-dot');
@@ -569,11 +616,10 @@ function setSyncState(state) {
 
 function applySettings() {
   const s = window._settings || {};
-  const tahun = s.tahunKewangan || '2024';
   const el = id => document.getElementById(id);
   if (el('hdr-nama-laporan')) el('hdr-nama-laporan').textContent = s.namaLaporan    || 'Laporan Penggunaan Peruntukan';
   if (el('hdr-nama-dept'))    el('hdr-nama-dept').textContent    = s.namaDept       || 'Jabatan Pendidikan Negeri';
-  if (el('hdr-tahun'))        el('hdr-tahun').textContent        = tahun;
+  if (el('hdr-tahun'))        el('hdr-tahun').textContent        = s.tahunKewangan  || '2024';
   if (el('hdr-disediakan'))   el('hdr-disediakan').textContent   = s.disediakanOleh || 'Nama Pegawai';
   if (el('hdr-disahkan'))     el('hdr-disahkan').textContent     = s.disahkanOleh   || 'Ketua Jabatan';
 }
@@ -642,15 +688,43 @@ function renderTable() {
   const tbody = document.getElementById('table-body');
   const table = document.getElementById('main-table');
   const empty = document.getElementById('empty-state');
+  const countEl = document.getElementById('search-count');
   tbody.innerHTML = '';
+
+  const q = _query.toLowerCase();
+  const filtered = q
+    ? (window._rows || []).filter(r =>
+        (r.perihal          || '').toLowerCase().includes(q) ||
+        (r.kod              || '').toLowerCase().includes(q) ||
+        (r.noInden          || '').toLowerCase().includes(q) ||
+        (r.rujukanKelulusan || '').toLowerCase().includes(q)
+      )
+    : (window._rows || []);
+
+  // Update count badge
+  if (q) {
+    countEl.textContent = filtered.length + ' / ' + (window._rows || []).length + ' rekod';
+  } else {
+    countEl.textContent = '';
+  }
 
   if (!window._rows || window._rows.length === 0) {
     table.style.display = 'none';
     empty.style.display = 'flex';
+  } else if (filtered.length === 0) {
+    table.style.display = 'none';
+    empty.innerHTML = `
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <p>Tiada rekod sepadan dengan "<strong>${esc(_query)}</strong>".</p>
+      <button class="btn btn-ghost no-print" onclick="clearSearch()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Padam Carian
+      </button>`;
+    empty.style.display = 'flex';
   } else {
     table.style.display = '';
     empty.style.display = 'none';
-    window._rows.forEach((r, i) => {
+    filtered.forEach((r, i) => {
       const baki   = r.peruntukan - r.belanja;
       const pGuna  = pct(r.belanja, r.peruntukan);
       const pJimat = pct(Math.max(baki, 0), r.peruntukan);
@@ -660,12 +734,25 @@ function renderTable() {
       const bakiColor  = baki < 0 ? 'var(--red)' : 'var(--green)';
       const key = r.firebaseKey;
 
-      const noIndenDisplay = r.noInden
-        ? `<span class="mono" style="font-size:12px;color:var(--navy);font-weight:600;">${esc(r.noInden)}</span>`
-        : `<span style="color:var(--muted);font-size:11px;">—</span>`;
+      const hasKod   = r.kod    && r.kod.trim();
+      const hasInden = r.noInden && r.noInden.trim();
+      let kodIndenHtml = '';
+      if (hasKod && hasInden) {
+        kodIndenHtml = `
+          <div class="kod-inden-cell">
+            <span class="kod-inden-primary">${hilite(r.kod, _query)}</span>
+            <span class="kod-inden-secondary">${hilite(r.noInden, _query)}</span>
+          </div>`;
+      } else if (hasKod) {
+        kodIndenHtml = `<span class="kod-inden-primary">${hilite(r.kod, _query)}</span>`;
+      } else if (hasInden) {
+        kodIndenHtml = `<span class="kod-inden-primary">${hilite(r.noInden, _query)}</span>`;
+      } else {
+        kodIndenHtml = `<span style="color:var(--muted);font-size:11px;">—</span>`;
+      }
 
       const rujukanDisplay = r.rujukanKelulusan
-        ? `<span class="mono" style="font-size:12px;color:var(--navy);font-weight:600;">${esc(r.rujukanKelulusan)}</span>`
+        ? `<span class="mono" style="font-size:12px;color:var(--navy);font-weight:600;">${hilite(r.rujukanKelulusan, _query)}</span>`
         : `<span style="color:var(--muted);font-size:11px;">—</span>`;
 
       const tr = document.createElement('tr');
@@ -673,10 +760,9 @@ function renderTable() {
       tr.style.animationDelay = (i * 25) + 'ms';
       tr.innerHTML = `
         <td style="color:var(--muted);font-size:12px;">${i + 1}</td>
-        <td class="mono" style="color:var(--navy);font-weight:600;font-size:12px;">${esc(r.kod)}</td>
-        <td>${noIndenDisplay}</td>
+        <td>${kodIndenHtml}</td>
         <td>${rujukanDisplay}</td>
-        <td>${esc(r.perihal)}</td>
+        <td>${hilite(r.perihal, _query)}</td>
         <td class="r mono">${fmt(r.peruntukan)}</td>
         <td class="r mono" style="color:var(--gold);">${fmt(r.belanja)}</td>
         <td class="r mono" style="color:${bakiColor};">${fmt(baki)}</td>
@@ -729,11 +815,11 @@ function openEditModal(key) {
   editingKey = key;
   document.getElementById('modal-title').textContent   = 'Kemaskini Rekod';
   document.getElementById('f-kod').value               = r.kod;
-  document.getElementById('f-noInden').value            = r.noInden;
-  document.getElementById('f-rujukanKelulusan').value   = r.rujukanKelulusan;
-  document.getElementById('f-perihal').value            = r.perihal;
-  document.getElementById('f-peruntukan').value = r.peruntukan;
-  document.getElementById('f-belanja').value    = r.belanja;
+  document.getElementById('f-noInden').value           = r.noInden;
+  document.getElementById('f-rujukanKelulusan').value  = r.rujukanKelulusan;
+  document.getElementById('f-perihal').value           = r.perihal;
+  document.getElementById('f-peruntukan').value        = r.peruntukan;
+  document.getElementById('f-belanja').value           = r.belanja;
   hideWarning();
   setModalBusy(false);
   document.getElementById('modal-overlay').classList.add('open');
@@ -871,7 +957,14 @@ function exportCSV() {
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeModal(); closeConfirm(); closeSettingsModal(); }
+  if (e.key === 'Escape') {
+    closeModal(); closeConfirm(); closeSettingsModal();
+    if (_query) clearSearch();
+  }
+  if (e.key === '/' && !document.getElementById('modal-overlay').classList.contains('open') && !document.getElementById('settings-overlay').classList.contains('open')) {
+    const si = document.getElementById('search-input');
+    if (document.activeElement !== si) { e.preventDefault(); si.focus(); }
+  }
   if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open')) {
     if (!['BUTTON','A'].includes(document.activeElement.tagName)) saveModal();
   }

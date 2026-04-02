@@ -290,34 +290,39 @@
 
     /* Core table — fixed layout so widths are respected */
     table {
-      font-size: 7.5px !important;
+      font-size: 7px !important;
       min-width: unset !important;
       width: 100% !important;
       table-layout: fixed !important;
       border-collapse: collapse !important;
+      border-spacing: 0 !important;
     }
     thead tr { background: #f0f2f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    tbody td, thead th { padding: 2px 4px !important; line-height: 1.2 !important; height: auto !important; }
+    tbody td, thead th { padding: 1px 3px !important; line-height: 1.1 !important; height: auto !important; }
     th {
       padding: 2px 3px !important;
       font-size: 6.5px !important;
       letter-spacing: 0 !important;
       white-space: normal !important;
       word-break: break-word !important;
-      line-height: 1.15 !important;
+      line-height: 1.1 !important;
       height: auto !important;
+      border-bottom: 1px solid #ccc !important;
     }
     td {
       padding: 1px 3px !important;
-      font-size: 7.5px !important;
+      font-size: 7px !important;
       word-break: break-word !important;
       overflow-wrap: break-word !important;
       white-space: normal !important;
-      line-height: 1.15 !important;
+      line-height: 1.1 !important;
       vertical-align: middle !important;
       height: auto !important;
       min-height: 0 !important;
+      border-bottom: 0.5px solid #eee !important;
+      margin: 0 !important;
     }
+    tbody tr td * { margin: 0 !important; padding: 0 !important; line-height: 1.1 !important; }
     tr { height: auto !important; min-height: 0 !important; }
     td.r, th.r { text-align: right; }
     td.c, th.c { text-align: center; }
@@ -339,13 +344,13 @@
 
     /* Merged Kod+Inden cell — stack layout preserved */
     .kod-inden-cell { display: block !important; }
-    .kod-inden-primary  { font-size: 7px !important; display: block !important; word-break: break-word !important; line-height: 1.15 !important; }
-    .kod-inden-secondary { font-size: 6.5px !important; display: block !important; word-break: break-word !important; line-height: 1.15 !important; margin-top: 0 !important; }
+    .kod-inden-primary  { font-size: 7px !important; display: block !important; word-break: break-word !important; line-height: 1.1 !important; }
+    .kod-inden-secondary { font-size: 6.5px !important; display: block !important; word-break: break-word !important; line-height: 1.1 !important; margin-top: 0 !important; }
 
     /* Monospace amounts — tighter */
-    .mono { font-size: 7px !important; }
+    .mono { font-size: 7px !important; letter-spacing: 0 !important; }
 
-    .badge { padding: 0 3px !important; font-size: 6.5px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .badge { padding: 0 2px !important; font-size: 6px !important; line-height: 1.2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody tr:last-child td { border-bottom: 1px solid #eee !important; }
     .signature-card { padding: 8px 10px !important; }
     .sig-grid { gap: 14px !important; }

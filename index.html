@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MDPH — Laporan Peruntukan</title>
+<title>Laporan Peruntukan</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Firebase SDK -->
@@ -292,23 +292,28 @@
       table-layout: fixed !important;
     }
     thead tr { background: #f0f2f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    tbody td, thead th { padding: 2px 4px !important; line-height: 1.2 !important; height: auto !important; }
     th {
-      padding: 4px 4px !important;
+      padding: 3px 4px !important;
       font-size: 7px !important;
       letter-spacing: 0 !important;
       white-space: normal !important;
       word-break: break-word !important;
-      line-height: 1.3 !important;
+      line-height: 1.2 !important;
+      height: auto !important;
     }
     td {
-      padding: 3px 4px !important;
+      padding: 2px 4px !important;
       font-size: 8px !important;
       word-break: break-word !important;
       overflow-wrap: break-word !important;
       white-space: normal !important;
-      line-height: 1.35 !important;
-      vertical-align: top !important;
+      line-height: 1.2 !important;
+      vertical-align: middle !important;
+      height: auto !important;
+      min-height: 0 !important;
     }
+    tr { height: auto !important; min-height: 0 !important; }
     td.r, th.r { text-align: right; }
     td.c, th.c { text-align: center; }
 
@@ -329,8 +334,8 @@
 
     /* Merged Kod+Inden cell — stack layout preserved */
     .kod-inden-cell { display: block !important; }
-    .kod-inden-primary  { font-size: 7.5px !important; display: block !important; word-break: break-word !important; }
-    .kod-inden-secondary { font-size: 7px !important; display: block !important; word-break: break-word !important; }
+    .kod-inden-primary  { font-size: 7.5px !important; display: block !important; word-break: break-word !important; line-height: 1.2 !important; }
+    .kod-inden-secondary { font-size: 7px !important; display: block !important; word-break: break-word !important; line-height: 1.2 !important; margin-top: 1px !important; }
 
     /* Monospace amounts — tighter */
     .mono { font-size: 7.5px !important; }
@@ -348,7 +353,7 @@
     .summary-card   { page-break-inside: avoid; break-inside: avoid; }
     .report-header  { page-break-inside: avoid; break-inside: avoid; }
     table { page-break-inside: auto; }
-    tr { page-break-inside: avoid; break-inside: avoid; }
+    tr { page-break-inside: auto; break-inside: auto; }
   }
 </style>
 </head>

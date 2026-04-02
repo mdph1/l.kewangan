@@ -167,13 +167,49 @@
   .empty-state p { margin-top: 12px; font-size: 13px; text-align: center; }
   .empty-state .btn { margin-top: 16px; }
 
+  /* Signature section */
   .signature-card { padding: 24px; }
   .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
   @media (max-width: 500px) { .sig-grid { grid-template-columns: 1fr; } }
   .sig-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
   .sig-line { border-bottom: 2px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 4px; }
   .sig-name { font-size: 13px; font-weight: 600; color: var(--navy); }
-  .sig-caption { font-size: 11px; color: var(--muted); }
+  .sig-caption { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  /* Tarikh writable line */
+  .sig-tarikh-line {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+  }
+  .sig-tarikh-label { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+  .sig-tarikh-write {
+    flex: 1;
+    border: none;
+    border-bottom: 1.5px solid #cbd5e1;
+    min-width: 120px;
+    height: 18px;
+    display: inline-block;
+    outline: none;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--text);
+    background: transparent;
+    padding: 0 2px;
+    cursor: text;
+  }
+  .sig-tarikh-write:focus { border-bottom-color: var(--navy); }
+  /* Space for manual cop rasmi stamp */
+  .sig-cop-space {
+    margin-top: 12px;
+    height: 90px;
+    border: 1.5px dashed #dde3ea;
+    border-radius: 8px;
+    background: #fafbfc;
+  }
+  .sig-cop-caption { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
   .footer-bar { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .footer-note { font-size: 11px; color: #cbd5e1; }
 
@@ -225,10 +261,10 @@
   .editable:hover .edit-icon { opacity: 1; }
 
   /* Print-only letterhead */
-  .print-letterhead {
-    display: none;
-  }
+  .print-letterhead { display: none; }
+
   .settings-modal { max-width: 520px; }
+
   @media print {
     .print-letterhead {
       display: flex !important;
@@ -240,31 +276,11 @@
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
-    .print-letterhead img {
-      width: 36px;
-      height: 36px;
-      object-fit: contain;
-      flex-shrink: 0;
-    }
-    .print-letterhead-divider {
-      width: 1.5px;
-      height: 28px;
-      background: #c9a227;
-      flex-shrink: 0;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
+    .print-letterhead img { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+    .print-letterhead-divider { width: 1.5px; height: 28px; background: #c9a227; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .print-letterhead-text { line-height: 1.3; }
-    .print-letterhead-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: #0f385a;
-      letter-spacing: .02em;
-    }
-    .print-letterhead-sub {
-      font-size: 8px;
-      color: #94a3b8;
-    }
+    .print-letterhead-name { font-size: 11px; font-weight: 700; color: #0f385a; letter-spacing: .02em; }
+    .print-letterhead-sub { font-size: 8px; color: #94a3b8; }
   }
 
   @media print {
@@ -287,50 +303,14 @@
     .table-header { padding: 6px 10px !important; border-bottom: 1px solid #ddd !important; }
     .table-title { font-size: 10px !important; }
     .table-wrap { overflow: visible !important; }
-
-    /* Core table — fixed layout so widths are respected */
-    table {
-      font-size: 9px !important;
-      min-width: unset !important;
-      width: 100% !important;
-      table-layout: fixed !important;
-      border-collapse: collapse !important;
-      border-spacing: 0 !important;
-    }
+    table { font-size: 9px !important; min-width: unset !important; width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border-spacing: 0 !important; }
     thead tr { background: #f7f8fb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody td, thead th { line-height: 1.35 !important; height: auto !important; }
-    th {
-      padding: 6px 8px !important;
-      font-size: 7.5px !important;
-      letter-spacing: .04em !important;
-      white-space: nowrap !important;
-      line-height: 1.3 !important;
-      height: auto !important;
-      border-bottom: 1.5px solid #dde3ea !important;
-      color: #0f385a !important;
-      font-weight: 700 !important;
-      text-transform: uppercase !important;
-    }
-    td {
-      padding: 7px 8px !important;
-      font-size: 9px !important;
-      word-break: break-word !important;
-      overflow-wrap: break-word !important;
-      white-space: normal !important;
-      line-height: 1.35 !important;
-      vertical-align: middle !important;
-      height: auto !important;
-      border-bottom: 1px solid #f1f5f9 !important;
-    }
+    th { padding: 6px 8px !important; font-size: 7.5px !important; letter-spacing: .04em !important; white-space: nowrap !important; line-height: 1.3 !important; height: auto !important; border-bottom: 1.5px solid #dde3ea !important; color: #0f385a !important; font-weight: 700 !important; text-transform: uppercase !important; }
+    td { padding: 7px 8px !important; font-size: 9px !important; word-break: break-word !important; overflow-wrap: break-word !important; white-space: normal !important; line-height: 1.35 !important; vertical-align: middle !important; height: auto !important; border-bottom: 1px solid #f1f5f9 !important; }
     tr { height: auto !important; min-height: 0 !important; }
     td.r, th.r { text-align: right; }
     td.c, th.c { text-align: center; }
-
-    /*
-      A4 landscape usable width ≈ 277mm − 20mm margins = 257mm
-      Bil=12 | Kod+Inden=55 | Rujukan=55 | Perihal=auto | Peruntukan=34 | Belanja=30 | Baki=30 | %Guna=18 | %Jimat=18
-      Fixed cols total ≈ 252mm → Perihal gets remaining ~5mm+ auto stretch
-    */
     table th:nth-child(1), table td:nth-child(1) { width: 10mm; text-align: center; }
     table th:nth-child(2), table td:nth-child(2) { width: 42mm; }
     table th:nth-child(3), table td:nth-child(3) { width: 38mm; }
@@ -340,21 +320,31 @@
     table th:nth-child(7), table td:nth-child(7) { width: 27mm; text-align: right; }
     table th:nth-child(8), table td:nth-child(8) { width: 16mm; text-align: center; }
     table th:nth-child(9), table td:nth-child(9) { width: 16mm; text-align: center; }
-
-    /* Merged Kod+Inden cell — stack layout preserved */
     .kod-inden-cell { display: block !important; }
     .kod-inden-primary  { font-size: 9px !important; display: block !important; word-break: break-word !important; line-height: 1.3 !important; color: #0f385a !important; font-weight: 700 !important; }
     .kod-inden-secondary { font-size: 8px !important; display: block !important; word-break: break-word !important; line-height: 1.3 !important; color: #94a3b8 !important; margin-top: 1px !important; }
-
-    /* Monospace amounts */
     .mono { font-size: 9px !important; letter-spacing: 0 !important; }
-
     .badge { padding: 1px 5px !important; font-size: 8px !important; font-weight: 700 !important; border-radius: 99px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody tr:last-child td { border-bottom: 1px solid #eee !important; }
+
+    /* Signature print styles */
     .signature-card { padding: 8px 10px !important; }
     .sig-grid { gap: 14px !important; }
     .sig-name { font-size: 10px !important; }
-    .sig-label, .sig-caption { font-size: 8px !important; }
+    .sig-label, .sig-caption, .sig-cop-caption { font-size: 8px !important; }
+    .sig-tarikh-label { font-size: 8px !important; }
+    .sig-tarikh-line { margin-top: 6px !important; }
+    .sig-tarikh-write { font-size: 9px !important; border-bottom: 1px solid #cbd5e1 !important; }
+    .sig-cop-space {
+      height: 70px !important;
+      margin-top: 8px !important;
+      border: 1px dashed #ccc !important;
+      border-radius: 4px !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .sig-cop-label { font-size: 7px !important; }
+    .sig-cop-caption { margin-top: 4px !important; }
     .footer-note { font-size: 7.5px !important; }
     .footer-bar { margin-top: 6px !important; padding-top: 5px !important; }
     .card { page-break-inside: auto; break-inside: auto; }
@@ -534,6 +524,7 @@
   <!-- Signature -->
   <div class="card signature-card">
     <div class="sig-grid">
+      <!-- Disediakan Oleh -->
       <div>
         <div class="sig-label">Disediakan Oleh:</div>
         <div class="sig-line">
@@ -542,8 +533,15 @@
             <svg class="edit-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </span>
         </div>
-        <div class="sig-caption">Tandatangan &amp; Cop Rasmi</div>
+ 
+        <div class="sig-tarikh-line">
+          <span class="sig-tarikh-label">Tarikh:</span>
+          <span class="sig-tarikh-write" contenteditable="true" spellcheck="false"></span>
+        </div>
+        <div class="sig-cop-space"></div>
+        <div class="sig-cop-caption">Cop Rasmi</div>
       </div>
+      <!-- Disahkan Oleh -->
       <div>
         <div class="sig-label">Disahkan Oleh:</div>
         <div class="sig-line">
@@ -552,7 +550,13 @@
             <svg class="edit-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </span>
         </div>
-        <div class="sig-caption">Tandatangan &amp; Cop Rasmi</div>
+      
+        <div class="sig-tarikh-line">
+          <span class="sig-tarikh-label">Tarikh:</span>
+          <span class="sig-tarikh-write" contenteditable="true" spellcheck="false"></span>
+        </div>
+        <div class="sig-cop-space"></div>
+        <div class="sig-cop-caption">Cop Rasmi</div>
       </div>
     </div>
     <div class="footer-bar">
@@ -620,7 +624,6 @@
       </button>
     </div>
     <div class="modal-body">
-      <!-- Row 1: Kod + No Inden side by side -->
       <div class="field-row">
         <div class="field-group">
           <label class="field-label">Kod Akaun / Objek</label>
@@ -631,7 +634,6 @@
           <input type="text" id="f-noInden" class="field-input mono" placeholder="" maxlength="40">
         </div>
       </div>
-      <!-- Row 2: Rujukan Kelulusan full width -->
       <div class="field-group">
         <label class="field-label">Rujukan Kelulusan</label>
         <select id="f-rujukanKelulusan" class="field-input" style="cursor:pointer;">
@@ -826,14 +828,12 @@ function renderTable() {
 
   let filtered = (window._rows || []);
 
-  // Apply rujukan filter first
   if (rf) {
     filtered = filtered.filter(r =>
       (r.rujukanKelulusan || '').toLowerCase().includes(rf)
     );
   }
 
-  // Then apply text search
   if (q) {
     filtered = filtered.filter(r =>
       (r.perihal          || '').toLowerCase().includes(q) ||
@@ -843,7 +843,6 @@ function renderTable() {
     );
   }
 
-  // Update count badge
   const hasFilter = q || rf;
   if (hasFilter) {
     countEl.textContent = filtered.length + ' / ' + (window._rows || []).length + ' rekod';

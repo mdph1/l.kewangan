@@ -135,6 +135,10 @@
   .search-clear svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; display: block; }
   .search-count { font-size: 11px; color: var(--muted); white-space: nowrap; }
   .highlight { background: rgba(201,162,39,.28); border-radius: 2px; padding: 0 1px; font-weight: 700; }
+
+  .filter-select { padding: 6px 28px 6px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-family: inherit; color: var(--text); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center; -webkit-appearance: none; appearance: none; cursor: pointer; font-weight: 600; outline: none; transition: border .15s, box-shadow .15s; }
+  .filter-select:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,56,90,.08); }
+  .filter-select.active { border-color: var(--gold); background-color: rgba(201,162,39,.06); color: var(--navy); }
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 820px; }
   thead tr { background: #f7f8fb; }
@@ -286,29 +290,30 @@
 
     /* Core table — fixed layout so widths are respected */
     table {
-      font-size: 8px !important;
+      font-size: 7.5px !important;
       min-width: unset !important;
       width: 100% !important;
       table-layout: fixed !important;
+      border-collapse: collapse !important;
     }
     thead tr { background: #f0f2f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody td, thead th { padding: 2px 4px !important; line-height: 1.2 !important; height: auto !important; }
     th {
-      padding: 3px 4px !important;
-      font-size: 7px !important;
+      padding: 2px 3px !important;
+      font-size: 6.5px !important;
       letter-spacing: 0 !important;
       white-space: normal !important;
       word-break: break-word !important;
-      line-height: 1.2 !important;
+      line-height: 1.15 !important;
       height: auto !important;
     }
     td {
-      padding: 2px 4px !important;
-      font-size: 8px !important;
+      padding: 1px 3px !important;
+      font-size: 7.5px !important;
       word-break: break-word !important;
       overflow-wrap: break-word !important;
       white-space: normal !important;
-      line-height: 1.2 !important;
+      line-height: 1.15 !important;
       vertical-align: middle !important;
       height: auto !important;
       min-height: 0 !important;
@@ -334,13 +339,13 @@
 
     /* Merged Kod+Inden cell — stack layout preserved */
     .kod-inden-cell { display: block !important; }
-    .kod-inden-primary  { font-size: 7.5px !important; display: block !important; word-break: break-word !important; line-height: 1.2 !important; }
-    .kod-inden-secondary { font-size: 7px !important; display: block !important; word-break: break-word !important; line-height: 1.2 !important; margin-top: 1px !important; }
+    .kod-inden-primary  { font-size: 7px !important; display: block !important; word-break: break-word !important; line-height: 1.15 !important; }
+    .kod-inden-secondary { font-size: 6.5px !important; display: block !important; word-break: break-word !important; line-height: 1.15 !important; margin-top: 0 !important; }
 
     /* Monospace amounts — tighter */
-    .mono { font-size: 7.5px !important; }
+    .mono { font-size: 7px !important; }
 
-    .badge { padding: 1px 3px !important; font-size: 7px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .badge { padding: 0 3px !important; font-size: 6.5px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody tr:last-child td { border-bottom: 1px solid #eee !important; }
     .signature-card { padding: 8px 10px !important; }
     .sig-grid { gap: 14px !important; }
@@ -475,6 +480,18 @@
           <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
+      <select class="filter-select no-print" id="rujukan-filter" onchange="onRujukanFilter(this.value)" title="Tapis mengikut Rujukan Kelulusan">
+        <option value="">SEMUA PERUNTUKAN</option>
+        <option>PERUNTUKAN BP1 KPKT</option>
+        <option>PERUNTUKAN P07 BKT SUK PERAK</option>
+        <option>PERUNTUKAN PEJ. KEWANGAN NEGERI</option>
+        <option>PERUNTUKAN MOTAC</option>
+        <option>PERUNTUKAN WANG AMANAH</option>
+        <option>PERUNTUKAN SUMBANGAN SALIRAN</option>
+        <option>PERUNTUKAN MDPH</option>
+        <option>PERUNTUKAN MARRIS</option>
+        <option>PERUNTUKAN KEMENTERIAN EKONOMI</option>
+      </select>
       <span class="search-count no-print" id="search-count"></span>
       <button class="btn btn-navy no-print" onclick="openAddModal()">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -613,7 +630,18 @@
       <!-- Row 2: Rujukan Kelulusan full width -->
       <div class="field-group">
         <label class="field-label">Rujukan Kelulusan</label>
-        <input type="text" id="f-rujukanKelulusan" class="field-input mono" placeholder="" maxlength="80">
+        <select id="f-rujukanKelulusan" class="field-input" style="cursor:pointer;">
+          <option value="">— Pilih Peruntukan —</option>
+          <option>PERUNTUKAN BP1 KPKT</option>
+          <option>PERUNTUKAN P07 BKT SUK PERAK</option>
+          <option>PERUNTUKAN PEJ. KEWANGAN NEGERI</option>
+          <option>PERUNTUKAN MOTAC</option>
+          <option>PERUNTUKAN WANG AMANAH</option>
+          <option>PERUNTUKAN SUMBANGAN SALIRAN</option>
+          <option>PERUNTUKAN MDPH</option>
+          <option>PERUNTUKAN MARRIS</option>
+          <option>PERUNTUKAN KEMENTERIAN EKONOMI</option>
+        </select>
       </div>
       <div class="field-group">
         <label class="field-label">Perihal <span style="color:var(--red)">*</span></label>
@@ -671,6 +699,7 @@ let modalMode      = 'add';
 let editingKey     = null;
 let pendingDelKey  = null;
 let _query         = '';
+let _rujukanFilter = '';
 
 const fmt = n  => 'RM ' + Number(n).toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pct = (b, p) => p > 0 ? ((b / p) * 100).toFixed(1) : '0.0';
@@ -694,6 +723,13 @@ function clearSearch() {
   document.getElementById('search-clear').style.display = 'none';
   document.getElementById('search-count').textContent = '';
   document.getElementById('search-input').focus();
+  renderTable();
+}
+
+function onRujukanFilter(val) {
+  _rujukanFilter = val;
+  const sel = document.getElementById('rujukan-filter');
+  sel.className = 'filter-select no-print' + (val ? ' active' : '');
   renderTable();
 }
 
@@ -782,17 +818,30 @@ function renderTable() {
   tbody.innerHTML = '';
 
   const q = _query.toLowerCase();
-  const filtered = q
-    ? (window._rows || []).filter(r =>
-        (r.perihal          || '').toLowerCase().includes(q) ||
-        (r.kod              || '').toLowerCase().includes(q) ||
-        (r.noInden          || '').toLowerCase().includes(q) ||
-        (r.rujukanKelulusan || '').toLowerCase().includes(q)
-      )
-    : (window._rows || []);
+  const rf = _rujukanFilter.toLowerCase();
+
+  let filtered = (window._rows || []);
+
+  // Apply rujukan filter first
+  if (rf) {
+    filtered = filtered.filter(r =>
+      (r.rujukanKelulusan || '').toLowerCase().includes(rf)
+    );
+  }
+
+  // Then apply text search
+  if (q) {
+    filtered = filtered.filter(r =>
+      (r.perihal          || '').toLowerCase().includes(q) ||
+      (r.kod              || '').toLowerCase().includes(q) ||
+      (r.noInden          || '').toLowerCase().includes(q) ||
+      (r.rujukanKelulusan || '').toLowerCase().includes(q)
+    );
+  }
 
   // Update count badge
-  if (q) {
+  const hasFilter = q || rf;
+  if (hasFilter) {
     countEl.textContent = filtered.length + ' / ' + (window._rows || []).length + ' rekod';
   } else {
     countEl.textContent = '';
@@ -803,12 +852,13 @@ function renderTable() {
     empty.style.display = 'flex';
   } else if (filtered.length === 0) {
     table.style.display = 'none';
+    const label = rf ? `Peruntukan: <strong>${esc(_rujukanFilter)}</strong>` : `"<strong>${esc(_query)}</strong>"`;
     empty.innerHTML = `
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <p>Tiada rekod sepadan dengan "<strong>${esc(_query)}</strong>".</p>
-      <button class="btn btn-ghost no-print" onclick="clearSearch()">
+      <p>Tiada rekod sepadan dengan ${label}.</p>
+      <button class="btn btn-ghost no-print" onclick="clearSearch();onRujukanFilter('');document.getElementById('rujukan-filter').value='';">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        Padam Carian
+        Padam Penapis
       </button>`;
     empty.style.display = 'flex';
   } else {
@@ -891,7 +941,8 @@ function openAddModal() {
   modalMode  = 'add';
   editingKey = null;
   document.getElementById('modal-title').textContent = 'Tambah Baris Baru';
-  ['f-kod','f-noInden','f-rujukanKelulusan','f-perihal','f-peruntukan','f-belanja'].forEach(id => document.getElementById(id).value = '');
+  ['f-kod','f-noInden','f-perihal','f-peruntukan','f-belanja'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-rujukanKelulusan').value = '';
   hideWarning();
   setModalBusy(false);
   document.getElementById('modal-overlay').classList.add('open');

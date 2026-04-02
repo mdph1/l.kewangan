@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laporan Peruntukan</title>
+<title>MDPH — Laporan Peruntukan</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Firebase SDK -->
@@ -220,58 +220,133 @@
   .editable .edit-icon { width: 12px; height: 12px; opacity: 0; transition: opacity .15s; flex-shrink: 0; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .editable:hover .edit-icon { opacity: 1; }
 
+  /* Print-only letterhead */
+  .print-letterhead {
+    display: none;
+  }
   .settings-modal { max-width: 520px; }
+  @media print {
+    .print-letterhead {
+      display: flex !important;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 10px 8px;
+      border-bottom: 2px solid #0f385a;
+      margin-bottom: 5px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .print-letterhead img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .print-letterhead-divider {
+      width: 1.5px;
+      height: 28px;
+      background: #c9a227;
+      flex-shrink: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .print-letterhead-text { line-height: 1.3; }
+    .print-letterhead-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0f385a;
+      letter-spacing: .02em;
+    }
+    .print-letterhead-sub {
+      font-size: 8px;
+      color: #94a3b8;
+    }
+  }
 
   @media print {
-    @page { size: A4 landscape; margin: 10mm 12mm; }
+    @page { size: A4 landscape; margin: 8mm 10mm; }
     nav, .no-print { display: none !important; }
-    html, body { height: auto !important; background: white !important; font-size: 11px; }
+    html, body { height: auto !important; background: white !important; font-size: 10px; }
     main { padding: 0; max-width: 100%; width: 100%; }
-    .card { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 4px !important; margin-bottom: 6px !important; }
-    .report-header { padding: 8px 12px !important; margin-bottom: 6px !important; }
-    .report-title-row h1, .report-title-row .serif { font-size: 14px !important; }
-    .report-dept { font-size: 10px !important; margin-top: 1px !important; }
-    .meta { font-size: 9px !important; }
-    .status-badge { font-size: 9px !important; padding: 2px 7px !important; }
-    .summary-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; margin-bottom: 6px !important; }
-    .summary-card { padding: 8px 10px !important; border-radius: 4px !important; }
-    .summary-label { font-size: 8px !important; margin-bottom: 2px !important; }
-    .summary-value { font-size: 12px !important; }
-    .progress-track { margin-top: 4px !important; height: 3px !important; }
-    .table-card { margin-bottom: 6px !important; overflow: visible !important; }
-    .table-header { padding: 7px 12px !important; border-bottom: 1px solid #ddd !important; }
-    .table-title { font-size: 11px !important; }
+    .card { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 3px !important; margin-bottom: 5px !important; }
+    .report-header { padding: 7px 10px !important; margin-bottom: 5px !important; }
+    .report-title-row h1, .report-title-row .serif { font-size: 13px !important; }
+    .report-dept { font-size: 9px !important; margin-top: 1px !important; }
+    .meta { font-size: 8px !important; }
+    .status-badge { font-size: 8px !important; padding: 2px 6px !important; }
+    .summary-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 5px !important; margin-bottom: 5px !important; }
+    .summary-card { padding: 6px 8px !important; border-radius: 3px !important; }
+    .summary-label { font-size: 7.5px !important; margin-bottom: 2px !important; }
+    .summary-value { font-size: 11px !important; }
+    .progress-track { margin-top: 3px !important; height: 3px !important; }
+    .table-card { margin-bottom: 5px !important; overflow: visible !important; }
+    .table-header { padding: 6px 10px !important; border-bottom: 1px solid #ddd !important; }
+    .table-title { font-size: 10px !important; }
     .table-wrap { overflow: visible !important; }
-    table { font-size: 9px !important; min-width: unset !important; width: 100% !important; table-layout: fixed; }
+
+    /* Core table — fixed layout so widths are respected */
+    table {
+      font-size: 8px !important;
+      min-width: unset !important;
+      width: 100% !important;
+      table-layout: fixed !important;
+    }
     thead tr { background: #f0f2f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    th { padding: 5px 5px !important; font-size: 7.5px !important; letter-spacing: 0 !important; }
-    td { padding: 4px 5px !important; font-size: 9px !important; }
+    th {
+      padding: 4px 4px !important;
+      font-size: 7px !important;
+      letter-spacing: 0 !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+      line-height: 1.3 !important;
+    }
+    td {
+      padding: 3px 4px !important;
+      font-size: 8px !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+      white-space: normal !important;
+      line-height: 1.35 !important;
+      vertical-align: top !important;
+    }
     td.r, th.r { text-align: right; }
     td.c, th.c { text-align: center; }
 
-    /* Column widths: merged Kod+Inden, Rujukan, Perihal, amounts, percentages */
-    table th:nth-child(1), table td:nth-child(1) { width: 22px; }
-    table th:nth-child(2), table td:nth-child(2) { width: 110px; }
-    table th:nth-child(3), table td:nth-child(3) { width: 70px; }
+    /*
+      A4 landscape usable width ≈ 277mm − 20mm margins = 257mm
+      Bil=12 | Kod+Inden=55 | Rujukan=55 | Perihal=auto | Peruntukan=34 | Belanja=30 | Baki=30 | %Guna=18 | %Jimat=18
+      Fixed cols total ≈ 252mm → Perihal gets remaining ~5mm+ auto stretch
+    */
+    table th:nth-child(1), table td:nth-child(1) { width: 12mm; text-align: center; }
+    table th:nth-child(2), table td:nth-child(2) { width: 55mm; }
+    table th:nth-child(3), table td:nth-child(3) { width: 55mm; }
     table th:nth-child(4), table td:nth-child(4) { width: auto; }
-    table th:nth-child(5), table td:nth-child(5) { width: 95px; }
-    table th:nth-child(6), table td:nth-child(6) { width: 85px; }
-    table th:nth-child(7), table td:nth-child(7) { width: 85px; }
-    table th:nth-child(8), table td:nth-child(8) { width: 50px; }
-    table th:nth-child(9), table td:nth-child(9) { width: 50px; }
+    table th:nth-child(5), table td:nth-child(5) { width: 34mm; text-align: right; }
+    table th:nth-child(6), table td:nth-child(6) { width: 30mm; text-align: right; }
+    table th:nth-child(7), table td:nth-child(7) { width: 30mm; text-align: right; }
+    table th:nth-child(8), table td:nth-child(8) { width: 18mm; text-align: center; }
+    table th:nth-child(9), table td:nth-child(9) { width: 18mm; text-align: center; }
 
-    .kod-inden-primary { font-size: 8px !important; }
-    .kod-inden-secondary { font-size: 7.5px !important; }
+    /* Merged Kod+Inden cell — stack layout preserved */
+    .kod-inden-cell { display: block !important; }
+    .kod-inden-primary  { font-size: 7.5px !important; display: block !important; word-break: break-word !important; }
+    .kod-inden-secondary { font-size: 7px !important; display: block !important; word-break: break-word !important; }
 
-    .badge { padding: 1px 5px !important; font-size: 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    /* Monospace amounts — tighter */
+    .mono { font-size: 7.5px !important; }
+
+    .badge { padding: 1px 3px !important; font-size: 7px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tbody tr:last-child td { border-bottom: 1px solid #eee !important; }
-    .signature-card { padding: 10px 12px !important; }
-    .sig-grid { gap: 16px !important; }
-    .sig-name { font-size: 11px !important; }
-    .sig-label, .sig-caption { font-size: 9px !important; }
-    .footer-note { font-size: 8px !important; }
-    .footer-bar { margin-top: 8px !important; padding-top: 6px !important; }
-    .card { page-break-inside: avoid; break-inside: avoid; }
+    .signature-card { padding: 8px 10px !important; }
+    .sig-grid { gap: 14px !important; }
+    .sig-name { font-size: 10px !important; }
+    .sig-label, .sig-caption { font-size: 8px !important; }
+    .footer-note { font-size: 7.5px !important; }
+    .footer-bar { margin-top: 6px !important; padding-top: 5px !important; }
+    .card { page-break-inside: auto; break-inside: auto; }
+    .signature-card { page-break-inside: avoid; break-inside: avoid; }
+    .summary-card   { page-break-inside: avoid; break-inside: avoid; }
+    .report-header  { page-break-inside: avoid; break-inside: avoid; }
     table { page-break-inside: auto; }
     tr { page-break-inside: avoid; break-inside: avoid; }
   }
@@ -315,6 +390,16 @@
 </nav>
 
 <main>
+  <!-- Print-only letterhead (hidden on screen) -->
+  <div class="print-letterhead">
+    <img src="https://lh3.googleusercontent.com/d/1gkq2KUDeSahQT9db8KgIs6HtDotaeao1" alt="MDPH Logo">
+    <div class="print-letterhead-divider"></div>
+    <div class="print-letterhead-text">
+      <div class="print-letterhead-name">Majlis Daerah Pengkalan Hulu</div>
+      <div class="print-letterhead-sub">Rekod Kewangan Rasmi</div>
+    </div>
+  </div>
+
   <!-- Report Header -->
   <div class="card report-header">
     <div>

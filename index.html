@@ -12,23 +12,46 @@
   import {
     getDatabase, ref, push, set, update, remove, onValue
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import {
+    getAuth, signInAnonymously, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyD8MxNjoBSfTgxs67fdysP0Ygx1Cr8NGV0",
-    authDomain: "lkewangan.firebaseapp.com",
-    databaseURL: "https://lkewangan-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "lkewangan",
-    storageBucket: "lkewangan.firebasestorage.app",
-    messagingSenderId: "319342051956",
-    appId: "1:319342051956:web:8b5c81339bece10a344721",
-    measurementId: "G-BS164WKHSJ"
+    apiKey: "AIzaSyD-HZ8DXRXDYDunMyEOqgqaFfIne62v9wY",
+    authDomain: "test-f0c7c.firebaseapp.com",
+    databaseURL: "https://test-f0c7c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "test-f0c7c",
+    storageBucket: "test-f0c7c.firebasestorage.app",
+    messagingSenderId: "1057035413588",
+    appId: "1:1057035413588:web:5b9f547e53ade712d525c1",
+    measurementId: "G-NYH9KMDYTH"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
-  const dbRef = ref(db, 'marris_bp1');
+  const app    = initializeApp(firebaseConfig);
+  const db     = getDatabase(app);
+  const auth   = getAuth(app);
+  const dbRef  = ref(db, 'marris_bp1');
 
   window._fb = { db, ref, push, set, update, remove, dbRef };
+
+  // Sign in anonymously so write rules (auth != null) are satisfied
+  signInAnonymously(auth).catch((err) => {
+    console.error('Anonymous auth failed:', err);
+    // Update sync dot to show auth error
+    const dot = document.getElementById('sync-dot');
+    const lbl = document.getElementById('sync-label-text');
+    if (dot) { dot.className = 'sync-dot error'; }
+    if (lbl) { lbl.textContent = 'Auth Gagal'; }
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    const dot = document.getElementById('sync-dot');
+    const lbl = document.getElementById('sync-label-text');
+    if (user) {
+      if (dot) dot.className = 'sync-dot';
+      if (lbl) lbl.textContent = 'Disambung';
+    }
+  });
 
   const settingsRef = ref(db, 'marris_settings');
   onValue(settingsRef, (snap) => {
@@ -533,7 +556,6 @@
             <svg class="edit-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </span>
         </div>
- 
         <div class="sig-tarikh-line">
           <span class="sig-tarikh-label">Tarikh:</span>
           <span class="sig-tarikh-write" contenteditable="true" spellcheck="false"></span>
@@ -550,7 +572,6 @@
             <svg class="edit-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </span>
         </div>
-      
         <div class="sig-tarikh-line">
           <span class="sig-tarikh-label">Tarikh:</span>
           <span class="sig-tarikh-write" contenteditable="true" spellcheck="false"></span>
